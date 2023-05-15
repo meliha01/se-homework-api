@@ -16,8 +16,7 @@ exports.getCurrentWeather = async (location) => {
       city: name
     };
   } catch (error) {
-    console.error('Error retrieving current weather:', error);
-    throw new Error('Failed to retrieve current weather');
+    console.error('Error retrieving data: ', error);
   }
 };
 
@@ -41,8 +40,7 @@ exports.getWeatherForecast = async (location) => {
 
     return forecast;
   } catch (error) {
-    console.error('Error retrieving weather forecast:', error);
-    throw new Error('Failed to retrieve weather forecast');
+    console.error('Error retrieving data: ', error);
   }
 };
 
@@ -53,7 +51,6 @@ exports.getWeatherHistory = async (location, startDate, endDate) => {
     const response = await axios.get(`http://api.weatherstack.com/historical?access_key=${API_KEY}&query=${location}&historical_date_start=${startDate}&historical_date_end=${endDate}`);
     return response.data;
   } catch (error) {
-    console.error('Error retrieving weather history:', error);
-    throw new Error('Failed to retrieve weather history');
+    console.error('Error retrieving data: ', error);
   }
 };
