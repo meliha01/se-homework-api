@@ -1,3 +1,4 @@
+//used for texting before importing api
 exports.getCurrentWeather = async (location) => {
     return {
       location: "Sarajevo",

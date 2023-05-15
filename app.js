@@ -3,6 +3,9 @@ const app = express();
 const winston = require('winston');
 const env = require('./configuration/env');
 
+const currentWeatherRoute = require('./routes/currentWeatherRoute');
+const forecastRoute = require('./routes/forecastRoute');
+
 // Create a logger instance
 const logger = winston.createLogger({
   level: 'info',
@@ -20,14 +23,9 @@ app.use((req, res, next) => {
   next();
 });
 
-const currentWeatherRoute = require('./routes/currentWeatherRoute');
-const forecastRoute = require('./routes/forecastRoute');
-const historyRoute = require('./routes/historyRoute');
-
 app.use(express.json());
 app.use('/current', currentWeatherRoute);
 app.use('/forecast', forecastRoute);
-app.use('/history', historyRoute);
 
 const PORT = env.PORT;
 app.listen(PORT, () => {

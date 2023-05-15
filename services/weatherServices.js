@@ -43,14 +43,3 @@ exports.getWeatherForecast = async (location) => {
     console.error('Error retrieving data: ', error);
   }
 };
-
-
-
-exports.getWeatherHistory = async (location, startDate, endDate) => {
-  try {
-    const response = await axios.get(`http://api.weatherstack.com/historical?access_key=${API_KEY}&query=${location}&historical_date_start=${startDate}&historical_date_end=${endDate}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error retrieving data: ', error);
-  }
-};
