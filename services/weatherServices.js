@@ -1,27 +1,52 @@
 const axios = require('axios');
 const env = require('../configuration/env')
 
-const API_KEY = env.API_KEY; // Replace with your weatherstack API key
+const API_KEY = env.API_KEY;
 
 exports.getCurrentWeather = async (location) => {
   try {
-    const response = await axios.get(`http://api.weatherstack.com/current?access_key=${API_KEY}&query=${location}`);
-    return response.data;
+    const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${API_KEY}&units=metric`);
+    const { main, weather, name } = response.data;
+    const { temp } = main;
+    const { description } = weather[0];
+
+    return {
+      temperature: temp,
+      weather: description,
+      city: name
+    };
   } catch (error) {
     console.error('Error retrieving current weather:', error);
     throw new Error('Failed to retrieve current weather');
   }
 };
 
-exports.getWeatherForecast = async (location, duration) => {
+
+exports.getWeatherForecast = async (location) => {
   try {
-    const response = await axios.get(`http://api.weatherstack.com/forecast?access_key=${API_KEY}&query=${location}&forecast_days=${duration}`);
-    return response.data;
+    const response = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${API_KEY}&units=metric`);
+    const { list } = response.data;
+    
+    const forecast = list.map(item => {
+      const { dt_txt, main, weather } = item;
+      const { temp } = main;
+      const { description } = weather[0];
+
+      return {
+        date: dt_txt,
+        temperature: temp,
+        weather: description
+      };
+    });
+
+    return forecast;
   } catch (error) {
     console.error('Error retrieving weather forecast:', error);
     throw new Error('Failed to retrieve weather forecast');
   }
 };
+
+
 
 exports.getWeatherHistory = async (location, startDate, endDate) => {
   try {

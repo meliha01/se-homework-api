@@ -2,7 +2,7 @@ const weatherService = require('../services/weatherServices');
 
 exports.getCurrentWeather = async (req, res) => {
   try {
-    const { location } = req.query;
+    const { location } = req.body;
     const currentWeather = await weatherService.getCurrentWeather(location);
     res.json(currentWeather);
   } catch (error) {
