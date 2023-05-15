@@ -1,13 +1,14 @@
 const express = require('express');
 const app = express();
 
-const currentWeatherRoutes = require('./routes/currentWeatherRoute');
-const forecastRoutes = require('./routes/forecastRoute');
-const historyRoutes = require('./routes/historyRoute');
+const currentWeatherRoute = require('./routes/currentWeatherRoute');
+const forecastRoute = require('./routes/forecastRoute');
+const historyRoute = require('./routes/historyRoute');
 
-app.use('/weather/current', currentWeatherRoutes);
-app.use('/weather/forecast', forecastRoutes);
-app.use('/weather/history', historyRoutes);
+app.use(express.json());
+app.use('/current', currentWeatherRoute);
+app.use('/forecast', forecastRoute);
+app.use('/history', historyRoute);
 
 const port = 3000;
 app.listen(port, () => {
