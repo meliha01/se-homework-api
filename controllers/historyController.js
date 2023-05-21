@@ -1,22 +1,30 @@
 const weatherService = require('../services/weatherServices');
+const NodeCache = require('node-cache');
 
-const historyController = async (req, res) => {
+const cache = new NodeCache();
+
+exports.historyController = async (req, res) => {
   try {
-    const location = req.body.location; 
-    const startDate = req.body.startDate; 
-    const endDate = req.body.endDate; 
+    const { location, startDate, endDate } = req.body;
+
     if (!location) {
-      return res.status(400).json({
-        error: "Location is required. Please provide a location.",
-      });
+      return res.status(400).json({ error: 'Location is required. Please provide a location.' });
     }
+
     if (!startDate || !endDate) {
-      return res.status(400).json({
-        error: "Start and end dates are required.",
-      });
+      return res.status(400).json({ error: 'Start and end dates are required.' });
+    }
+
+    const cacheKey = `${location}_${startDate}_${endDate}`;
+    const cachedData = cache.get(cacheKey);
+    if (cachedData) {
+      console.log('Cached history data');
+      return res.json(cachedData);
     }
 
     const parsedWeatherData = await weatherService.getWeatherHistory(location, startDate, endDate);
+
+    cache.set(cacheKey, parsedWeatherData);
 
     res.send({
       location,
@@ -25,8 +33,4 @@ const historyController = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: "Error, can't retrieve data." });
   }
-};
-
-module.exports = {
-  historyController
 };
